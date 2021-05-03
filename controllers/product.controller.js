@@ -50,7 +50,6 @@ exports.addProduct = async (req, res, next) => {
 
 // Update Product
 exports.updateProduct = async (req, res, next) => {
-  const { name, price, image } = req.body;
   try {
     let product = await Product.findById(req.params.id);
 
@@ -61,7 +60,7 @@ exports.updateProduct = async (req, res, next) => {
       });
     }
 
-    product = await Product.findByIdAndUpdate(req.params.id, updatedProduct, {
+    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
 
