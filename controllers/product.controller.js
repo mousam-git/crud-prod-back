@@ -18,6 +18,16 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
+exports.getProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    return res.status(200).json({ success: true, data: product });
+  } catch (error) {
+    return res.status(500).json({ success: false, data: "Server Error" });
+  }
+};
+
 // POST add product
 exports.addProduct = async (req, res, next) => {
   try {
@@ -38,6 +48,30 @@ exports.addProduct = async (req, res, next) => {
   }
 };
 
+// Update Product
+exports.updateProduct = async (req, res, next) => {
+  const { name, price, image } = req.body;
+  try {
+    let product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        error: "No product with the given id found",
+      });
+    }
+
+    product = await Product.findByIdAndUpdate(req.params.id, updatedProduct, {
+      new: true,
+    });
+
+    return res.status(201).json({ success: true, data: product });
+  } catch (error) {
+    return res.status(500).json({ status: false, data: "Server Error" });
+  }
+};
+
+// Delete Product
 exports.deleteProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
